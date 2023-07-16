@@ -21,6 +21,12 @@
 	width: 22px;
 	height: 22px;
 	opacity: 0.3;
-	left: 12px;
 	top: 12px;
+	&:nth-child(1) {
+		left: 12px;
+	}
+	&:nth-child(3) {
+		right: 22px;
+		cursor: pointer;
+	}
 }

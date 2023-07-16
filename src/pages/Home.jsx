@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { SearchContext } from '../App';
 
+import axios from 'axios';
 import Categories from '../components/Categories';
 import Pagination from '../components/Pagination';
 import PizzaBlock from '../components/PizzaBlock';
@@ -12,31 +13,27 @@ import Sort from '../components/Sort';
 const url = 'https://64a2d760b45881cc0ae5c89c.mockapi.io/pizza';
 
 const Home = () => {
-	const { categoryId, sortType } = useSelector(state => state.filter);
-
+	const { categoryId, sortType, currentPage } = useSelector(state => state.filter);
 	const { search } = useContext(SearchContext);
 	const [items, setItems] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
-	const [pageNumber, setPageNumber] = useState(1);
 
 	useEffect(() => {
 		setIsLoading(true);
 
 		const categoryURL = categoryId ? `&category=${categoryId}` : '';
 		const searchURL = search ? `&search=${search}` : '';
-		const pageURL = pageNumber ? `&page=${pageNumber}` : '';
+		const pageURL = currentPage ? `&page=${currentPage}` : '';
 		const limitURL = '&limit=4';
 		const orderURL = sortType.sortProperty ? `&orderBy=${sortType.sortProperty}` : '';
 
-		fetch(`${url}?${pageURL}${limitURL}${searchURL}${categoryURL}${orderURL}`)
-			.then(res => res.json())
-			.then(json => {
-				setItems(json);
-				setIsLoading(false);
-			});
+		axios(`${url}?${pageURL}${limitURL}${searchURL}${categoryURL}${orderURL}`).then(response => {
+			setItems(response.data);
+			setIsLoading(false);
+		});
 
 		// window.scrollTo(0, 0);
-	}, [categoryId, sortType, pageNumber, search]);
+	}, [categoryId, sortType, currentPage, search]);
 
 	return (
 		<div className='container'>
@@ -50,7 +47,7 @@ const Home = () => {
 					? [...new Array(6)].map((_, index) => <Sceleton key={index} />)
 					: items.map((elem, index) => <PizzaBlock key={elem.id} {...elem} index={index} />)}
 			</div>
-			<Pagination setPageNumber={setPageNumber} />
+			<Pagination />
 		</div>
 	);
 };

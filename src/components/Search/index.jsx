@@ -1,12 +1,29 @@
-import React, { useContext } from 'react';
+import debounce from 'lodash.debounce';
+import React, { useCallback, useContext, useRef, useState } from 'react';
 import { SearchContext } from '../../App';
 import styles from './Search.module.scss';
 
 const Search = () => {
+	const [value, setValue] = useState('');
 	const { setSearch } = useContext(SearchContext);
+	const inputRef = useRef();
+
+	const updateValueDebounce = useCallback(
+		debounce(str => {
+			setSearch(str);
+		}, 500),
+		[]
+	);
 
 	const onChangeValue = e => {
-		setSearch(e.target.value);
+		setValue(e.target.value);
+		updateValueDebounce(e.target.value);
+	};
+
+	const clearInputValue = () => {
+		setValue('');
+		setSearch('');
+		inputRef.current.focus();
 	};
 
 	return (
@@ -32,11 +49,23 @@ const Search = () => {
 				/>
 			</svg>
 			<input
+				value={value}
+				ref={inputRef}
 				onChange={onChangeValue}
-				type='search'
 				placeholder='Поиск пиццы...'
 				className={styles.input}
 			/>
+			<svg
+				onClick={clearInputValue}
+				className={styles.icon}
+				height='48'
+				viewBox='0 0 48 48'
+				width='48'
+				xmlns='http://www.w3.org/2000/svg'
+			>
+				<path d='M38 12.83L35.17 10 24 21.17 12.83 10 10 12.83 21.17 24 10 35.17 12.83 38 24 26.83 35.17 38 38 35.17 26.83 24z' />
+				<path d='M0 0h48v48H0z' fill='none' />
+			</svg>
 		</div>
 	);
 };
