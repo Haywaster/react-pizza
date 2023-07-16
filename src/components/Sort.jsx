@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useClickOutside } from '../hooks/useClickOutside';
+import { setSortType } from '../redux/slices/filterSlice';
 
 const filtersList = [
 	{ name: 'популярности', sortProperty: 'rating' },
@@ -7,7 +9,9 @@ const filtersList = [
 	{ name: 'алфавиту', sortProperty: 'title' }
 ];
 
-const Sort = ({ sortType, setSortType }) => {
+const Sort = () => {
+	const sortType = useSelector(state => state.filter.sortType);
+	const dispatch = useDispatch();
 	const [isVisible, setIsVisible] = useState(false);
 
 	const onClose = () => {
@@ -17,7 +21,7 @@ const Sort = ({ sortType, setSortType }) => {
 	const ref = useClickOutside(onClose);
 
 	const onClickListItem = i => {
-		setSortType(filtersList[i]);
+		dispatch(setSortType(filtersList[i]));
 		setIsVisible(false);
 	};
 
