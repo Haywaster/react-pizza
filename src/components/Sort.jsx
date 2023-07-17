@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useClickOutside } from '../hooks/useClickOutside';
 import { setSortType } from '../redux/slices/filterSlice';
 
-const filtersList = [
+export const filtersList = [
 	{ name: 'популярности', sortProperty: 'rating' },
 	{ name: 'цене', sortProperty: 'price' },
 	{ name: 'алфавиту', sortProperty: 'title' }
