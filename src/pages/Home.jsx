@@ -59,6 +59,15 @@ const Home = () => {
 		isMounted.current = true;
 	}, [categoryId, sortType.sortProperty, currentPage]);
 
+	// Если был первый рендер, то запрашиваем пиццы
+	useEffect(() => {
+		if (!isSearch.current) {
+			fetchPizzas();
+		}
+		isSearch.current = false;
+		// window.scrollTo(0, 0);
+	}, [categoryId, sortType.sortProperty, currentPage, search]);
+
 	// Если был первый рендер, то проверяем URL-параметры и сохраняем в redux
 	useEffect(() => {
 		if (location.search) {
@@ -69,15 +78,6 @@ const Home = () => {
 			isSearch.current = true;
 		}
 	}, []);
-
-	// Если был первый рендер, то запрашиваем пиццы
-	useEffect(() => {
-		if (!isSearch.current) {
-			fetchPizzas();
-		}
-		isSearch.current = false;
-		// window.scrollTo(0, 0);
-	}, [categoryId, sortType.sortProperty, currentPage, search]);
 
 	return (
 		<div className='container'>

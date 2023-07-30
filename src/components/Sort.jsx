@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useClickOutside } from '../hooks/useClickOutside';
 import { setSortType } from '../redux/slices/filterSlice';
 
 export const filtersList = [
@@ -13,12 +12,18 @@ const Sort = () => {
 	const sortType = useSelector(state => state.filter.sortType);
 	const dispatch = useDispatch();
 	const [isVisible, setIsVisible] = useState(false);
+	const sortBlock = useRef();
 
-	const onClose = () => {
-		setIsVisible(false);
-	};
+	useEffect(() => {
+		const handlerClickOutside = event => {
+			if (!event.composedPath().includes(sortBlock.current)) {
+				setIsVisible(false);
+			}
+		};
 
-	const ref = useClickOutside(onClose);
+		document.body.addEventListener('click', handlerClickOutside);
+		return () => document.body.removeEventListener('click', handlerClickOutside);
+	}, []);
 
 	const onClickListItem = i => {
 		dispatch(setSortType(filtersList[i]));
@@ -26,7 +31,7 @@ const Sort = () => {
 	};
 
 	return (
-		<div className='sort'>
+		<div ref={sortBlock} className='sort'>
 			<div className='sort__label'>
 				<svg
 					width='10'
@@ -44,7 +49,7 @@ const Sort = () => {
 				<span onClick={() => setIsVisible(prev => !prev)}>{sortType.name}</span>
 			</div>
 			{isVisible && (
-				<div ref={ref} className='sort__popup'>
+				<div className='sort__popup'>
 					<ul>
 						{filtersList.map((elem, i) => (
 							<li

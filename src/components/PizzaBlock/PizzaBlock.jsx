@@ -1,21 +1,32 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItem } from '../../redux/slices/cartSlice';
 
-const PizzaBlock = pizzaData => {
-	let typeNames = ['тонкое', 'традиционное'];
+export const typeNames = ['тонкое', 'традиционное'];
 
-	const [pizzaCount, setPezzaCount] = useState(null);
+const PizzaBlock = ({ id, imageUrl, title, types, sizes, price }) => {
 	const [sizeIndex, setSizeIndex] = useState(0);
 	const [typeIndex, setTypeIndex] = useState(0);
 
-	const onClickAdd = () => {
-		setPezzaCount(prev => prev + 1);
-	};
+	const pizzaItem = useSelector(state => state.cart.items.find(item => item.id === id));
+	const dispatch = useDispatch();
 
 	const onChangeParam = (index, setState) => {
 		setState(index);
 	};
 
-	const { id, imageUrl, title, types, sizes, price, category, rating } = pizzaData;
+	const onAddItem = () => {
+		const newItem = {
+			id,
+			imageUrl,
+			title,
+			size: [sizes[sizeIndex]],
+			type: [types[typeIndex]],
+			price,
+			count: 1
+		};
+		dispatch(addItem(newItem));
+	};
 
 	return (
 		<div className='pizza-block-wrapper'>
@@ -24,13 +35,13 @@ const PizzaBlock = pizzaData => {
 				<h4 className='pizza-block__title'>{title}</h4>
 				<div className='pizza-block__selector'>
 					<ul>
-						{types.map(index => (
+						{types.map((pizzaIndex, index) => (
 							<li
 								key={index}
 								className={typeIndex === index ? 'active' : ''}
 								onClick={() => onChangeParam(index, setTypeIndex)}
 							>
-								{typeNames[index]}
+								{typeNames[pizzaIndex]}
 							</li>
 						))}
 					</ul>
@@ -46,9 +57,9 @@ const PizzaBlock = pizzaData => {
 						))}
 					</ul>
 				</div>
-				<div className='pizza-block__bottom'>
+				<div onClick={onAddItem} className='pizza-block__bottom'>
 					<div className='pizza-block__price'>от {price} ₽</div>
-					<div onClick={onClickAdd} className='button button--outline button--add'>
+					<div className='button button--outline button--add'>
 						<svg
 							width='12'
 							height='12'
@@ -62,7 +73,7 @@ const PizzaBlock = pizzaData => {
 							/>
 						</svg>
 						<span>Добавить</span>
-						{pizzaCount ? <i>{pizzaCount}</i> : null}
+						{pizzaItem && <i>{pizzaItem.count}</i>}
 					</div>
 				</div>
 			</div>
