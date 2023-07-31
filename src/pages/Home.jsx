@@ -1,8 +1,7 @@
 import qs from 'qs';
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { SearchContext } from '../App';
 
 import Categories from '../components/Categories';
 import Pagination from '../components/Pagination';
@@ -10,19 +9,17 @@ import PizzaBlock from '../components/PizzaBlock';
 import Sceleton from '../components/PizzaBlock/Sceleton';
 import Sort, { filtersList } from '../components/Sort';
 
-import { setFilters } from '../redux/slices/filterSlice';
-import { fetchPizzas } from '../redux/slices/pizzaSlice';
+import { selectFilter, setFilters } from '../redux/slices/filterSlice';
+import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
 
 const Home = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	let [searchParams] = useSearchParams();
 
-	const { items, status } = useSelector(state => state.pizza);
-	const { categoryId, sortType, currentPage } = useSelector(state => state.filter);
+	const { items, status } = useSelector(selectPizzaData);
+	const { categoryId, sortType, currentPage, search } = useSelector(selectFilter);
 	const dispatch = useDispatch();
-
-	const { search } = useContext(SearchContext);
 
 	const isMounted = useRef(false);
 	const isSearch = useRef(false);
