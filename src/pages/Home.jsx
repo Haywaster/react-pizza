@@ -1,6 +1,5 @@
-import axios from 'axios';
 import qs from 'qs';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { SearchContext } from '../App';
@@ -12,37 +11,30 @@ import Sceleton from '../components/PizzaBlock/Sceleton';
 import Sort, { filtersList } from '../components/Sort';
 
 import { setFilters } from '../redux/slices/filterSlice';
-
-const url = 'https://64a2d760b45881cc0ae5c89c.mockapi.io/pizza';
+import { fetchPizzas } from '../redux/slices/pizzaSlice';
 
 const Home = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	let [searchParams] = useSearchParams();
 
+	const { items, status } = useSelector(state => state.pizza);
 	const { categoryId, sortType, currentPage } = useSelector(state => state.filter);
 	const dispatch = useDispatch();
 
 	const { search } = useContext(SearchContext);
-	const [items, setItems] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
 
 	const isMounted = useRef(false);
 	const isSearch = useRef(false);
 
-	const fetchPizzas = () => {
-		setIsLoading(true);
-
+	const getPizzas = async () => {
 		const categoryURL = categoryId ? `&category=${categoryId}` : '';
 		const searchURL = search ? `&search=${search}` : '';
 		const pageURL = currentPage ? `&page=${currentPage}` : '';
 		const limitURL = '&limit=4';
 		const orderURL = sortType.sortProperty ? `&orderBy=${sortType.sortProperty}` : '';
 
-		axios(`${url}?${pageURL}${limitURL}${searchURL}${categoryURL}${orderURL}`).then(response => {
-			setItems(response.data);
-			setIsLoading(false);
-		});
+		dispatch(fetchPizzas({ categoryURL, searchURL, pageURL, limitURL, orderURL }));
 	};
 
 	// Если изменили параметры и был первый рендер
@@ -62,7 +54,7 @@ const Home = () => {
 	// Если был первый рендер, то запрашиваем пиццы
 	useEffect(() => {
 		if (!isSearch.current) {
-			fetchPizzas();
+			getPizzas();
 		}
 		isSearch.current = false;
 		// window.scrollTo(0, 0);
@@ -86,12 +78,29 @@ const Home = () => {
 				<Sort />
 			</div>
 			<h2 className='content__title'>Все пиццы</h2>
-			<div className='content__items'>
-				{isLoading
-					? [...new Array(6)].map((_, index) => <Sceleton key={index} />)
-					: items.map((elem, index) => <PizzaBlock key={elem.id} {...elem} index={index} />)}
-			</div>
-			<Pagination />
+			{status === 'error' ? (
+				<div className='content__error-getting'>
+					<h2>
+						Упс, ошибочка <icon>😕</icon>
+					</h2>
+					<p>Не удалось получить питсы. Попробуйте немного позже.</p>
+				</div>
+			) : status === 'loading' ? (
+				<div className='content__items'>
+					{[...new Array(6)].map((_, index) => (
+						<Sceleton key={index} />
+					))}
+				</div>
+			) : (
+				<>
+					<div className='content__items'>
+						{items.map((elem, index) => (
+							<PizzaBlock key={elem.id} {...elem} index={index} />
+						))}
+					</div>
+					<Pagination />
+				</>
+			)}
 		</div>
 	);
 };
