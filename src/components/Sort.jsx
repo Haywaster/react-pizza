@@ -31,7 +31,7 @@ const Sort = () => {
 	};
 
 	return (
-		<div ref={sortBlock} className='sort'>
+		<div ref={ sortBlock } className='sort'>
 			<div className='sort__label'>
 				<svg
 					width='10'
@@ -46,23 +46,23 @@ const Sort = () => {
 					/>
 				</svg>
 				<b>Сортировка по:</b>
-				<span onClick={() => setIsVisible(prev => !prev)}>{sortType.name}</span>
+				<span onClick={ () => setIsVisible(prev => !prev) }>{ sortType.name }</span>
 			</div>
-			{isVisible && (
+			{ isVisible && (
 				<div className='sort__popup'>
 					<ul>
-						{filtersList.map((elem, i) => (
+						{ filtersList.map((elem, i) => (
 							<li
-								className={sortType === i ? 'active' : ''}
-								onClick={() => onClickListItem(i)}
-								key={i}
+								className={ sortType === i ? 'active' : '' }
+								onClick={ () => onClickListItem(i) }
+								key={ i }
 							>
-								{elem.name}
+								{ elem.name }
 							</li>
-						))}
+						)) }
 					</ul>
 				</div>
-			)}
+			) }
 		</div>
 	);
 };

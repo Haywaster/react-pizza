@@ -7,7 +7,7 @@ const CartBlock = ({ id, imageUrl, title, size, type, price, count }) => {
 	const dispatch = useDispatch();
 
 	const onRemoveItem = id => {
-		if (window.confirm(`Ты действительно хочешь удалить товар "${title}"?`)) {
+		if (window.confirm(`Ты действительно хочешь удалить товар "${ title }"?`)) {
 			dispatch(removeItem(id));
 		}
 	};
@@ -15,17 +15,17 @@ const CartBlock = ({ id, imageUrl, title, size, type, price, count }) => {
 	return (
 		<div className='cart__item'>
 			<div className='cart__item-img'>
-				<img className='pizza-block__image' src={imageUrl} alt='Pizza' />
+				<img className='pizza-block__image' src={ imageUrl } alt='Pizza'/>
 			</div>
 			<div className='cart__item-info'>
-				<h3>{title}</h3>
+				<h3>{ title }</h3>
 				<p>
-					{typeNames[type]}, {size} см.
+					{ typeNames[type] }, { size } см.
 				</p>
 			</div>
 			<div className='cart__item-count'>
 				<div
-					onClick={() => dispatch(changeCount([id, 'decrease']))}
+					onClick={ () => dispatch(changeCount([id, 'decrease'])) }
 					className='button button--outline button--circle cart__item-count-minus'
 				>
 					<svg
@@ -45,9 +45,9 @@ const CartBlock = ({ id, imageUrl, title, size, type, price, count }) => {
 						/>
 					</svg>
 				</div>
-				<b>{count}</b>
+				<b>{ count }</b>
 				<div
-					onClick={() => dispatch(changeCount([id, 'increase']))}
+					onClick={ () => dispatch(changeCount([id, 'increase'])) }
 					className='button button--outline button--circle cart__item-count-plus'
 				>
 					<svg
@@ -69,9 +69,9 @@ const CartBlock = ({ id, imageUrl, title, size, type, price, count }) => {
 				</div>
 			</div>
 			<div className='cart__item-price'>
-				<b>{price} ₽</b>
+				<b>{ price } ₽</b>
 			</div>
-			<div onClick={() => onRemoveItem(id)} className='cart__item-remove'>
+			<div onClick={ () => onRemoveItem(id) } className='cart__item-remove'>
 				<div className='button button--outline button--circle'>
 					<svg
 						width='10'

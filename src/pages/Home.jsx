@@ -25,11 +25,11 @@ const Home = () => {
 	const isSearch = useRef(false);
 
 	const getPizzas = async () => {
-		const categoryURL = categoryId ? `&category=${categoryId}` : '';
-		const searchURL = search ? `&search=${search}` : '';
-		const pageURL = currentPage ? `&page=${currentPage}` : '';
+		const categoryURL = categoryId ? `&category=${ categoryId }` : '';
+		const searchURL = search ? `&search=${ search }` : '';
+		const pageURL = currentPage ? `&page=${ currentPage }` : '';
 		const limitURL = '&limit=4';
-		const orderURL = sortType.sortProperty ? `&orderBy=${sortType.sortProperty}` : '';
+		const orderURL = sortType.sortProperty ? `&orderBy=${ sortType.sortProperty }` : '';
 
 		dispatch(fetchPizzas({ categoryURL, searchURL, pageURL, limitURL, orderURL }));
 	};
@@ -42,7 +42,7 @@ const Home = () => {
 				sortProperty: sortType.sortProperty,
 				currentPage
 			});
-			navigate(`?${queryString}`);
+			navigate(`?${ queryString }`);
 		}
 
 		isMounted.current = true;
@@ -71,11 +71,11 @@ const Home = () => {
 	return (
 		<div className='container'>
 			<div className='content__top'>
-				<Categories />
-				<Sort />
+				<Categories/>
+				<Sort/>
 			</div>
 			<h2 className='content__title'>Все пиццы</h2>
-			{status === 'error' ? (
+			{ status === 'error' ? (
 				<div className='content__error-getting'>
 					<h2>
 						Упс, ошибочка <icon>😕</icon>
@@ -84,20 +84,20 @@ const Home = () => {
 				</div>
 			) : status === 'loading' ? (
 				<div className='content__items'>
-					{[...new Array(6)].map((_, index) => (
-						<Sceleton key={index} />
-					))}
+					{ [...new Array(6)].map((_, index) => (
+						<Sceleton key={ index }/>
+					)) }
 				</div>
 			) : (
 				<>
 					<div className='content__items'>
-						{items.map((elem, index) => (
-							<PizzaBlock key={elem.id} {...elem} index={index} />
-						))}
+						{ items.map((elem, index) => (
+							<PizzaBlock key={ elem.id } { ...elem } index={ index }/>
+						)) }
 					</div>
-					<Pagination />
 				</>
-			)}
+			) }
+			<Pagination/>
 		</div>
 	);
 };

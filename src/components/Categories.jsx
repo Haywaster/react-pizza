@@ -11,15 +11,15 @@ const Categories = () => {
 	return (
 		<div className='categories'>
 			<ul>
-				{categories.map((elem, index) => (
+				{ categories.map((elem, index) => (
 					<li
-						className={categoryId === index ? 'active' : ''}
-						key={index}
-						onClick={() => dispatch(setCategory(index))}
+						className={ categoryId === index ? 'active' : '' }
+						key={ index }
+						onClick={ () => dispatch(setCategory(index)) }
 					>
-						{elem}
+						{ elem }
 					</li>
-				))}
+				)) }
 			</ul>
 		</div>
 	);

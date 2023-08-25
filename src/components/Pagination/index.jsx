@@ -13,14 +13,14 @@ const Pagination = () => {
 
 	return (
 		<ReactPaginate
-			className={styles.root}
+			className={ styles.root }
 			breakLabel='...'
 			nextLabel='>'
-			onPageChange={onChangePage}
-			pageRangeDisplayed={8}
-			pageCount={3}
+			onPageChange={ onChangePage }
+			pageRangeDisplayed={ 8 }
+			pageCount={ 3 }
 			previousLabel='<'
-			renderOnZeroPageCount={null}
+			renderOnZeroPageCount={ null }
 		/>
 	);
 };

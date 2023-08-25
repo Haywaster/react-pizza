@@ -54,6 +54,8 @@ export const cartSlice = createSlice({
 						state.itemsCount = state.itemsCount - 1;
 					}
 					break;
+				default:
+					break;
 			}
 		}
 	}

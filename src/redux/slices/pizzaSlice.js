@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const url = 'https://64a2d760b45881cc0ae5c89c.mockapi.io/pizza';
+export const url = 'https://64e8aa8f99cf45b15fdff6dc.mockapi.io/pizza';
 
-export const fetchPizzas = createAsyncThunk('pizza/fetchPizzasItems', async params => {
+export const fetchPizzas = createAsyncThunk('pizza/fetchPizzasItems', async (params) => {
 	const { categoryURL, searchURL, pageURL, limitURL, orderURL } = params;
-	const { data } = await axios(`${url}?${pageURL}${limitURL}${searchURL}${categoryURL}${orderURL}`);
+	const { data } = await axios(`${ url }?${ pageURL }${ limitURL }${ searchURL }${ categoryURL }${ orderURL }`);
+
 	return data;
 });
 

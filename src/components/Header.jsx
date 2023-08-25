@@ -14,20 +14,20 @@ const Header = () => {
 			<div className='container'>
 				<Link to='/'>
 					<div className='header__logo'>
-						<img width='38' src={logo} alt='Pizza logo' />
+						<img width='38' src={ logo } alt='Pizza logo'/>
 						<div>
 							<h1>React Pizza</h1>
 							<p>самая вкусная пицца во вселенной</p>
 						</div>
 					</div>
 				</Link>
-				<Search />
+				<Search/>
 				<div className='header__cart'>
 					<Link className='button button--cart' to='/cart'>
-						<span>{totalPrice} ₽</span>
+						<span>{ totalPrice } ₽</span>
 						<div className='button__delimiter'></div>
-						<img style={{ marginRight: '7px' }} src={cart} alt='cart' />
-						<span>{itemsCount}</span>
+						<img style={ { marginRight: '7px' } } src={ cart } alt='cart'/>
+						<span>{ itemsCount }</span>
 					</Link>
 				</div>
 			</div>

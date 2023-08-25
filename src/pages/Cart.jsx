@@ -16,7 +16,7 @@ const Cart = () => {
 	};
 
 	if (!itemsCount) {
-		return <CartEmpty />;
+		return <CartEmpty/>;
 	}
 
 	return (
@@ -93,23 +93,23 @@ const Cart = () => {
 									strokeLinejoin='round'
 								/>
 							</svg>
-							<span onClick={onClearItems}>Очистить корзину</span>
+							<span onClick={ onClearItems }>Очистить корзину</span>
 						</div>
 					</div>
 					<div className='content__items'>
-						{items.map(item => (
-							<CartBlock key={item.id} {...item} />
-						))}
+						{ items.map(item => (
+							<CartBlock key={ item.id } { ...item } />
+						)) }
 					</div>
 					<div className='cart__bottom'>
 						<div className='cart__bottom-details'>
 							<span>
-								{' '}
-								Всего пицц: <b>{itemsCount} шт.</b>{' '}
+								{ ' ' }
+								Всего пицц: <b>{ itemsCount } шт.</b>{ ' ' }
 							</span>
 							<span>
-								{' '}
-								Сумма заказа: <b>{totalPrice} ₽</b>{' '}
+								{ ' ' }
+								Сумма заказа: <b>{ totalPrice } ₽</b>{ ' ' }
 							</span>
 						</div>
 						<div className='cart__bottom-buttons'>
