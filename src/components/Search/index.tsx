@@ -1,5 +1,5 @@
-import debounce from 'lodash.debounce';
-import React, { useCallback, useRef, useState } from 'react';
+import debounce from 'lodash.debounce'
+import React, { useCallback, useRef, useState, ChangeEvent, LegacyRef, ChangeEventHandler } from 'react';
 import { useDispatch } from 'react-redux';
 import { setSearch } from '../../redux/slices/filterSlice';
 import styles from './Search.module.scss';
@@ -7,7 +7,7 @@ import styles from './Search.module.scss';
 const Search = () => {
 	const [value, setValue] = useState('');
 	const dispatch = useDispatch();
-	const inputRef = useRef();
+	const inputRef: LegacyRef<HTMLInputElement> = useRef(null);
 
 	const updateValueDebounce = useCallback(
 		debounce(str => {
@@ -16,20 +16,20 @@ const Search = () => {
 		[]
 	);
 
-	const onChangeValue = e => {
+	const onChangeValue:ChangeEventHandler<HTMLInputElement> = (e: ChangeEvent<HTMLInputElement>):void => {
 		setValue(e.target.value);
 		updateValueDebounce(e.target.value);
 	};
 
-	const clearInputValue = () => {
+	const clearInputValue = ():void => {
 		setValue('');
 		dispatch(setSearch(''));
-		inputRef.current.focus();
+		inputRef.current?.focus();
 	};
 
 	return (
-		<div className={ styles.root }>
-			<svg className={ styles.icon } viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'>
+		<div className={ styles['root'] }>
+			<svg className={ styles['icon'] } viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'>
 				<title/>
 				<path
 					d='M221.09,64A157.09,157.09,0,1,0,378.18,221.09,157.1,157.1,0,0,0,221.09,64Z'
@@ -54,11 +54,11 @@ const Search = () => {
 				ref={ inputRef }
 				onChange={ onChangeValue }
 				placeholder='Поиск пиццы...'
-				className={ styles.input }
+				className={ styles['input'] }
 			/>
 			<svg
 				onClick={ clearInputValue }
-				className={ styles.icon }
+				className={ styles['icon'] }
 				height='48'
 				viewBox='0 0 48 48'
 				width='48'

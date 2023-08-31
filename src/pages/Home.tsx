@@ -1,39 +1,40 @@
 import qs from 'qs';
-import React, { useEffect, useRef } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import Categories from '../components/Categories';
 import Pagination from '../components/Pagination';
-import PizzaBlock from '../components/PizzaBlock';
 import Sceleton from '../components/PizzaBlock/Sceleton';
 import Sort, { filtersList } from '../components/Sort';
 
 import { selectFilter, setFilters } from '../redux/slices/filterSlice';
+import PizzaBlock from '../components/PizzaBlock';
 import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
+import { AppDispatch } from '../redux/store';
 
-const Home = () => {
+const Home: FC = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	let [searchParams] = useSearchParams();
-
+	
 	const { items, status } = useSelector(selectPizzaData);
 	const { categoryId, sortType, currentPage, search } = useSelector(selectFilter);
-	const dispatch = useDispatch();
-
+	const dispatch = useDispatch<AppDispatch>();
+	
 	const isMounted = useRef(false);
 	const isSearch = useRef(false);
-
+	
 	const getPizzas = async () => {
 		const categoryURL = categoryId ? `&category=${ categoryId }` : '';
 		const searchURL = search ? `&search=${ search }` : '';
 		const pageURL = currentPage ? `&page=${ currentPage }` : '';
 		const limitURL = '&limit=4';
 		const orderURL = sortType.sortProperty ? `&orderBy=${ sortType.sortProperty }` : '';
-
+		
 		dispatch(fetchPizzas({ categoryURL, searchURL, pageURL, limitURL, orderURL }));
 	};
-
+	
 	// Если изменили параметры и был первый рендер
 	useEffect(() => {
 		if (isMounted.current) {
@@ -44,10 +45,10 @@ const Home = () => {
 			});
 			navigate(`?${ queryString }`);
 		}
-
+		
 		isMounted.current = true;
 	}, [categoryId, sortType.sortProperty, currentPage]);
-
+	
 	// Если был первый рендер, то запрашиваем пиццы
 	useEffect(() => {
 		if (!isSearch.current) {
@@ -56,18 +57,18 @@ const Home = () => {
 		isSearch.current = false;
 		// window.scrollTo(0, 0);
 	}, [categoryId, sortType.sortProperty, currentPage, search]);
-
+	
 	// Если был первый рендер, то проверяем URL-параметры и сохраняем в redux
 	useEffect(() => {
 		if (location.search) {
 			const params = Object.fromEntries([...searchParams]);
-			const sortType = filtersList.find(item => item.sortProperty === params.sortProperty);
-
+			const sortType = filtersList.find(item => item.sortProperty === params['sortProperty']);
+			
 			dispatch(setFilters({ ...params, sortType }));
 			isSearch.current = true;
 		}
 	}, []);
-
+	
 	return (
 		<div className='container'>
 			<div className='content__top'>
@@ -78,7 +79,7 @@ const Home = () => {
 			{ status === 'error' ? (
 				<div className='content__error-getting'>
 					<h2>
-						Упс, ошибочка <icon>😕</icon>
+						Упс, ошибочка 😕
 					</h2>
 					<p>Не удалось получить питсы. Попробуйте немного позже.</p>
 				</div>
@@ -89,13 +90,11 @@ const Home = () => {
 					)) }
 				</div>
 			) : (
-				<>
-					<div className='content__items'>
-						{ items.map((elem, index) => (
-							<PizzaBlock key={ elem.id } { ...elem } index={ index }/>
-						)) }
-					</div>
-				</>
+				<div className='content__items'>
+					{ items.map((elem) => (
+						<PizzaBlock key={ elem.id } { ...elem } />
+					)) }
+				</div>
 			) }
 			<Pagination/>
 		</div>

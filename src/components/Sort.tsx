@@ -1,35 +1,32 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { JSX, RefObject, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFilter, setSortType } from '../redux/slices/filterSlice';
 
-export const filtersList = [
-	{ name: 'популярности', sortProperty: 'rating' },
-	{ name: 'цене', sortProperty: 'price' },
-	{ name: 'алфавиту', sortProperty: 'title' }
-];
+export const filtersList = [{ name: 'популярности', sortProperty: 'rating' }, { name: 'цене', sortProperty: 'price' },
+	{ name: 'алфавиту', sortProperty: 'title' }];
 
-const Sort = () => {
+const Sort = (): JSX.Element => {
 	const { sortType } = useSelector(selectFilter);
 	const dispatch = useDispatch();
 	const [isVisible, setIsVisible] = useState(false);
-	const sortBlock = useRef();
-
+	const sortBlock: RefObject<HTMLDivElement> = useRef(null);
+	
 	useEffect(() => {
-		const handlerClickOutside = event => {
-			if (!event.composedPath().includes(sortBlock.current)) {
+		const handlerClickOutside = (event: MouseEvent): void => {
+			if (sortBlock.current && !event.composedPath().includes(sortBlock.current)) {
 				setIsVisible(false);
 			}
 		};
-
+		
 		document.body.addEventListener('click', handlerClickOutside);
 		return () => document.body.removeEventListener('click', handlerClickOutside);
 	}, []);
-
-	const onClickListItem = i => {
+	
+	const onClickListItem = (i: number): void => {
 		dispatch(setSortType(filtersList[i]));
 		setIsVisible(false);
 	};
-
+	
 	return (
 		<div ref={ sortBlock } className='sort'>
 			<div className='sort__label'>
@@ -53,18 +50,15 @@ const Sort = () => {
 					<ul>
 						{ filtersList.map((elem, i) => (
 							<li
-								className={ sortType === i ? 'active' : '' }
+								className={ Number(sortType) === i ? 'active' : '' }
 								onClick={ () => onClickListItem(i) }
 								key={ i }
 							>
 								{ elem.name }
-							</li>
-						)) }
+							</li>)) }
 					</ul>
-				</div>
-			) }
-		</div>
-	);
+				</div>) }
+		</div>);
 };
 
 export default Sort;

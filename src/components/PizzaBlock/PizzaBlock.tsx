@@ -2,20 +2,21 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem, selectCartItemById } from '../../redux/slices/cartSlice';
 import { Link } from 'react-router-dom';
+import { IFullPizzaItem } from '../../@types/types';
 
 export const typeNames = ['тонкое', 'традиционное'];
 
-const PizzaBlock = ({ id, imageUrl, title, types, sizes, price }) => {
-	const [sizeIndex, setSizeIndex] = useState(0);
-	const [typeIndex, setTypeIndex] = useState(0);
-
+const PizzaBlock = ({ id, imageUrl, title, types, sizes, price }: IFullPizzaItem) => {
+	const [sizeIndex, setSizeIndex] = useState<number>(0);
+	const [typeIndex, setTypeIndex] = useState<number>(0);
+	
 	const pizzaItem = useSelector(selectCartItemById(id));
 	const dispatch = useDispatch();
-
-	const onChangeParam = (index, setState) => {
+	
+	const onChangeParam = (index: number, setState: React.Dispatch<React.SetStateAction<number>>): void => {
 		setState(index);
 	};
-
+	
 	const onAddItem = () => {
 		const newItem = {
 			id,
@@ -28,7 +29,7 @@ const PizzaBlock = ({ id, imageUrl, title, types, sizes, price }) => {
 		};
 		dispatch(addItem(newItem));
 	};
-
+	
 	return (
 		<div className='pizza-block-wrapper'>
 			<div className='pizza-block'>

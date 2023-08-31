@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { JSX } from 'react';
 import { useDispatch } from 'react-redux';
 import { changeCount, removeItem } from '../redux/slices/cartSlice';
 import { typeNames } from './PizzaBlock/PizzaBlock';
+import { ICartItem } from '../@types/types';
 
-const CartBlock = ({ id, imageUrl, title, size, type, price, count }) => {
+const CartBlock = ({ id, imageUrl, title, size, type, price, count }: ICartItem): JSX.Element => {
 	const dispatch = useDispatch();
-
-	const onRemoveItem = id => {
+	
+	const onRemoveItem = (id: number): void => {
 		if (window.confirm(`Ты действительно хочешь удалить товар "${ title }"?`)) {
 			dispatch(removeItem(id));
 		}
 	};
-
+	
 	return (
 		<div className='cart__item'>
 			<div className='cart__item-img'>

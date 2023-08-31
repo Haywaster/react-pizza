@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import cart from '../assets/img/cart.svg';
@@ -6,9 +6,9 @@ import logo from '../assets/img/pizza-logo.svg';
 import { selectCart } from '../redux/slices/cartSlice';
 import Search from './Search';
 
-const Header = () => {
+const Header: FC = () => {
 	const { totalPrice, itemsCount } = useSelector(selectCart);
-
+	
 	return (
 		<div className='header'>
 			<div className='container'>
